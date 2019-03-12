@@ -1,0 +1,2 @@
+curl -X POST -d "aaaaaa" http://localhost:8080
+curl -X POST -d "aaaaaa" http://localhost

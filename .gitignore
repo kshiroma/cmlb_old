@@ -1,0 +1,14 @@
+target
+target-grunt
+*.iml
+.DS_Store
+node_modules/
+dist/**/
+!dist/css/
+!dist/fonts/
+.project
+.classpath
+.settings/
+.idea/
+*.jasper
+chromedriver.exe
