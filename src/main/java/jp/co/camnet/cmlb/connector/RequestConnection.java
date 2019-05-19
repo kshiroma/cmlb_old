@@ -1,5 +1,7 @@
 package jp.co.camnet.cmlb.connector;
 
+import jp.co.camnet.cmlb.Cmlb;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +23,7 @@ public class RequestConnection extends AbstractConnection implements Runnable {
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
-            //System.out.println(new String(os.toByteArray()));
+            Cmlb.logger.trace(outputStream.toString());
         }
     }
 

@@ -24,10 +24,8 @@ public class JettyHandler extends AbstractHandler {
             httpServletResponse.getWriter().write("\n");
             httpServletResponse.getWriter().write(String.valueOf(httpServletRequest.getLocalPort()));
             httpServletResponse.getWriter().write("\n");
-            System.out.println("GET");
         }
         if (request.getMethod().equals(HttpMethod.POST.asString())) {
-            //System.out.println("POST");
             request.getResponse().getWriter().write("POST\n");
             byte[] message = new byte[4096];
             int size = request.getInputStream().read(message);

@@ -29,7 +29,7 @@ public class Cmlb implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Listening for connections");
+        logger.info("Listening for connections");
         while (!Thread.interrupted()) {
             try {
                 Socket newSock = listenSock.accept();

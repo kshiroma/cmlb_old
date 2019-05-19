@@ -28,13 +28,4 @@ public class CmlbRouter {
         }
         return null;
     }
-
-    public static void main(String[] args) {
-        String uri = "/aaa/bbb/ccc";
-        String pattern = "/aaa/.*";
-        boolean result = uri.matches(pattern);
-        //boolean result = pattern.matches(uri);
-        System.out.println(result);
-    }
-
 }
