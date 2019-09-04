@@ -1,0 +1,187 @@
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+Set-Cookie: PARAM00=my; Path=/; HttpOnly
+Set-Cookie: JSESSIONID=4A1E8F0C0F06F1D6DE2711D4D7A9F621; Path=/; HttpOnly
+Content-Type: text/html;charset=UTF-8
+Content-Language: ja-JP
+Content-Length: 5055
+Date: Tue, 03 Sep 2019 13:23:41 GMT
+
+<!DOCTYPE html>
+
+<!--
+  ~ Copyright 2007-2018 CAM Corporation.
+  -->
+
+<html lang="ja" ng-app="camNg.shop.scpayment">
+<head lang="en">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1024,user-scalable=no" />
+    <title>Login</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- TODO Thymeleaf でパスの変更を一カ所に集約する -->
+
+    <!-- vendor css -->
+    <link rel="stylesheet" href="../vendor/bootstrap/dist/css/bootstrap.css?20190903222341" />
+
+    <!-- common css -->
+
+    <!-- sub project css -->
+
+    <!-- this page css -->
+
+    <!-- vendor js -->
+    <!--<script th:src="${'../vendor/jquery/jquery.js?'+requestTail}"></script>-->
+    <!--<script th:src="${'../vendor/angularjs/angular.min.js?'+requestTail}"></script>-->
+    <!--<script th:src="${'../vendor/angularjs/angular-route.min.js?'+requestTail}"></script>-->
+    <!--<script th:src="${'../vendor/angularjs/ui-bootstrap-tpls-0.10.0.min.js?'+requestTail}"></script>-->
+
+    <!-- common js -->
+    <script src="../common/js/cam-cattleya-without-ng.min.js?20190903222341"></script>
+
+    <!-- sub project js-->
+
+    <!-- this page js -->
+    <!--<script th:src="${'../js/cam/login/login.js?'+requestTail}"></script>-->
+
+    <style type="text/css">
+
+        .ctrl-language {
+            margin-top: 16px;
+        }
+
+        .ctrl-language label {
+            display: inline;
+        }
+
+        .ctrl-language select {
+            width: 70%;
+            display: inline;
+            min-width: 80px;
+        }
+
+        .login-panel {
+            width: 480px;
+            height: auto;
+            padding: 20px 48px;
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        .form-group.btn-area {
+            margin: 0 15px;
+        }
+
+        .btn.btn-login {
+            width: 100%;
+            color: #FFFFFF;
+            background-color: #5ab47a;
+            border-color: #FFFFFF;
+            border-radius: 3px;
+            margin-bottom: 8px;
+        }
+
+        .btn.btn-login:hover {
+            opacity: 0.9;
+        }
+
+        .btn.btn-login.btn-google {
+            background-color: #DD4B39;
+        }
+
+        button.btn-change {
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            background-color: inherit;
+        }
+
+        button.btn-change:hover {
+            color: #357ebd;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<form action="login" method="post" class="form cam-form-search">
+    <div class="col-md-2 col-xs-offset-10 ctrl-language">
+        <label class="control-label">言語</label>
+        <select class="form-control" id="languageModeCode" name="languageModeCode">
+            <option value="0" selected="selected">日本語</option>
+            <option value="1">English</option>
+        </select>
+    </div>
+
+
+    <div style="padding-top:160px;">
+
+        <div class="panel panel-default login-panel center-block">
+
+
+            <!--<br/>-->
+            <br />
+            <br />
+
+            <div class="form-group clearfix">
+                <label class="col-xs-4 control-label">Login ID </label>
+
+                <div class="col-xs-8">
+                    <input type="text" autocomplete="off" id="loginId" name="loginId" value="" />
+                    <br />
+
+                </div>
+            </div>
+
+            <div class="form-group clearfix">
+                <label class="col-xs-4 control-label">Password</label>
+
+                <div class="col-xs-8">
+                    <input type="password" id="password" name="password" value="" />
+                    <br />
+
+
+                    <p style="display:none;"><input type="password" name="dummy00" /></p>
+
+                    <p style="display:none;"><input type="password" name="dummy01" /></p>
+                </div>
+            </div>
+
+            <div class="form-group btn-area">
+                <button type="submit" class="btn btn-login" name="login">Login</button>
+                <button type="submit" name="changePassword" class="btn-change">Change Password</button>
+            </div>
+        </div>
+
+        <div class="login-panel center-block">
+            <div class="form-group btn-area">
+                <button type="submit" class="btn btn-login btn-google" name="googleSignIn">Googleアカウントでログイン</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+<script>
+    (function () {
+        var l = document.getElementById('loginId');
+        l.focus();
+        l.addEventListener("keypress", function (e) {
+            var s = (e.code || '').toLocaleLowerCase();
+            if (s === "enter" || s === "numpadenter") {
+                e.preventDefault();
+                document.getElementById('password').focus();
+            }
+        })
+    })();
+</script>
+
+</body>
+<input type="hidden" id="versionInfo" name="versionInfo" value="" />
+<input type="hidden" id="hostName" name="hostName" value="shiromahome:8000" />
+</html>

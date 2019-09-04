@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class CmlbConnection implements Runnable {
 
@@ -63,6 +66,10 @@ public class CmlbConnection implements Runnable {
 
     protected String readLine() throws IOException {
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
+
+        Files.copy(is, Paths.get("work/requets.txt"), StandardCopyOption.REPLACE_EXISTING);
+
+
         try {
             byte[] data = new byte[1];
             int length = 0;
