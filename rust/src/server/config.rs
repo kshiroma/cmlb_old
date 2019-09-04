@@ -11,7 +11,6 @@ use crate::server::http_request::{HttpRequestFirstLine, HttpRequestHeader, HttpR
 pub struct RoutingRule {
     name: String,
     routing_rule: fn(&HttpRequestInfo) -> Option<RelayConnectionInfo>,
-    //HttpRequestInfoを受け取って、URLを返す
 }
 
 pub struct RelayConnectionInfo {
@@ -86,55 +85,4 @@ impl ServerConfig {
         }
         return None;
     }
-}
-
-
-#[test]
-fn test() {
-    let routeingRule1 = RoutingRule::new("routeingRule1".to_string(), routing1);
-    let routeingRule2 = RoutingRule::new("routeingRule2".to_string(), routing2);
-    let mut config = ServerConfig::new();
-    config.add(routeingRule1);
-    config.add(routeingRule2);
-
-    use std::fs::File;
-    let path = "test/httprequest/requets_post.txt";
-    let mut file = File::open(path).unwrap();
-    let request = read_http_request(&mut file).unwrap();
-    //let b = Box::new(request);
-    //let req = b.clone();
-    let result = config.route(&request);
-    if result.is_some() {
-        println!("{}", result.unwrap().path);
-    } else {
-        println!("None");
-    }
-}
-
-fn routing1(request: &HttpRequestInfo) -> Option<RelayConnectionInfo> {
-    let re = Regex::new(r"^/cattleya/.*").unwrap();
-    let relay = if re.is_match(&request.http_first_line.uri) {
-        Some(RelayConnectionInfo {
-            host: "localhost".to_string(),
-            port: 8000,
-            path: "/cattleya".to_string(),
-        })
-    } else {
-        None
-    };
-    return relay;
-}
-
-fn routing2(request: &HttpRequestInfo) -> Option<RelayConnectionInfo> {
-    let re = Regex::new(r"^/bbb/.*").unwrap();
-    let relay = if re.is_match(&request.http_first_line.uri) {
-        Some(RelayConnectionInfo {
-            host: "localhost".to_string(),
-            port: 8001,
-            path: "/ccc/ddd".to_string(),
-        })
-    } else {
-        None
-    };
-    return relay;
 }

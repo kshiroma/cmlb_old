@@ -1,4 +1,6 @@
 use crate::server::http_request::read_http_request;
+use chrono::Local;
+use std::io::Write;
 
 pub struct HttpStatusEntry {
     code: i32,
@@ -49,4 +51,20 @@ impl HttpStatus {
 fn test() {
     println!("{}", HttpStatus::BadRequest.get().unwrap());
     println!("{}", HttpStatus::BadRequest.get_as_string().unwrap());
+}
+
+pub fn not_found(writer: &mut Write) -> std::io::Result<()> {
+    let status = HttpStatus::NotFound;
+    let code = status.get().unwrap();
+    let string = status.get_as_string().unwrap();
+    write!(writer, "HTTP/1.1 {} {}\r\n", code, string)?;
+    write!(writer, "Date: {} \r\n", Local::now())?;
+    let buf = b"<html><body><h1>Not Found</h1></body></html>";
+    let length = buf.len();
+    write!(writer, "Content-Length: {}", length)?;
+    write!(writer, "\r\n")?;
+    write!(writer, "\r\n")?;
+    writer.write(buf);
+    write!(writer, "\r\n");
+    return Ok(());
 }

@@ -62,7 +62,6 @@ impl Downstream {
         } else if data_length == 0 {
             //何もしない
         } else {
-            //読み込んだものをすべて書き込む
             let mut send_data_length = 0;
             loop {
                 let size = reader.read(&mut buf).unwrap();

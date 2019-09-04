@@ -33,9 +33,9 @@ impl HttpRequestFirstLine {
         let mut array = firstLine.split_whitespace();
 
         HttpRequestFirstLine {
-            method: String::from(array.next().unwrap_or_default()),
-            uri: String::from(array.next().unwrap_or_default().to_string()),
-            protoolVersion: String::from(array.next().unwrap_or_default()),
+            method: String::from(array.next().unwrap()),
+            uri: String::from(array.next().unwrap()),
+            protoolVersion: String::from(array.next().unwrap()),
             request: firstLine,
         }
     }

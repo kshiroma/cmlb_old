@@ -4,8 +4,19 @@ use std::net::{Ipv4Addr, TcpStream};
 
 use regex::Regex;
 
-use crate::server::config::RelayConnectionInfo;
+use crate::server::config::{RelayConnectionInfo, ServerConfig, RoutingRule};
 use crate::server::http_request::HttpRequestInfo;
+
+pub fn createSampleConfig() -> ServerConfig {
+    let routeingRule1 = RoutingRule::new("routing1".to_string(), routing1);
+    let routeingRule2 = RoutingRule::new("routing2".to_string(), routing2);
+    let mut config = ServerConfig::new();
+    config.add(routeingRule1);
+    config.add(routeingRule2);
+
+    return config;
+}
+
 
 pub fn routing1(request: &HttpRequestInfo) -> Option<RelayConnectionInfo> {
     let re = Regex::new(r"^/cattleya/.*").unwrap();

@@ -1,6 +1,5 @@
 use std::io::prelude::*;
 
-#[warn(dead_code)]
 pub fn read_line(reader: &mut Read) -> String {
     let mut line: Vec<u8> = Vec::new();
     loop {
@@ -25,3 +24,17 @@ pub fn read_line(reader: &mut Read) -> String {
     //println!("{}", string);
     string
 }
+
+#[test]
+fn test_readFirstLine() {
+    use std::fs;
+    use std::fs::File;
+//use std::io::Read;
+    let path = "test/httprequest/requets_get.txt";
+    let _string = fs::read_to_string(path).unwrap();
+
+    let mut file = File::open(path).unwrap();
+    let firstLine = read_line(&mut file);
+    assert_eq!(firstLine, "GET /favicon.ico HTTP/1.1");
+}
+
