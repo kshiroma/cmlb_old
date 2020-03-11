@@ -38,12 +38,9 @@ impl Upstream {
         stream.write(self.request.http_first_line.protoolVersion.as_bytes());
         stream.write(b"\r\n");
 
-        print!("{}", self.request.http_first_line.method);
-        print!("{}", " ");
-        print!("{}", self.request.http_first_line.uri);
-        print!("{}", " ");
-        print!("{}", self.request.http_first_line.protoolVersion);
-        print!("{}", "\r\n");
+        log::trace!("{}", self.request.http_first_line.method);
+        log::trace!("{}", self.request.http_first_line.uri);
+        log::trace!("{}", self.request.http_first_line.protoolVersion);
     }
 
     pub fn sendHeader(&self) {
@@ -76,7 +73,7 @@ impl Upstream {
             stream.write(b"\r\n");
         }
         stream.write(b"\r\n");
-        println!("end send header.")
+        log::trace!("end send header.")
     }
 
     pub fn sendBody(&self, reader: &mut Read) {
@@ -87,6 +84,7 @@ impl Upstream {
             let d = size.to_string();
             let data_length: i64 = d.parse().unwrap();
             self.send(&buf[0..size]);
+            log::trace!("request {} bytes",d);
             unsend_data_length = unsend_data_length - data_length;
         }
     }

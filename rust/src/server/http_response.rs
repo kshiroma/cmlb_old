@@ -93,8 +93,9 @@ pub fn read_header(reader: &mut Read) -> std::io::Result<HttpResponseHeader> {
 
 pub fn read_http_response_info(read: &mut Read) -> std::io::Result<HttpResponseInfo> {
     let firstString = read_line(read);
+    let str = firstString.clone();
     let firstLine = HttpResponseFirstLine::new(firstString);
-    println!("begin read response header");
+    println!("begin read response header of {}", str);
     let headers = read_header(read).unwrap();
 
     return Ok(HttpResponseInfo::new(firstLine, headers));

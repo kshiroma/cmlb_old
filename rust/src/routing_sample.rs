@@ -4,7 +4,7 @@ use std::net::{Ipv4Addr, TcpStream};
 
 use regex::Regex;
 
-use crate::server::config::{RelayConnectionInfo, ServerConfig, RoutingRule};
+use crate::server::config::{RelayConnectionInfo, RoutingRule, ServerConfig};
 use crate::server::http_request::HttpRequestInfo;
 
 pub fn createSampleConfig() -> ServerConfig {
@@ -57,6 +57,23 @@ fn print(name: &str, request: &HttpRequestInfo, path: &str) {
     println!(" checking {} ... {} ,{}", name, request.http_first_line.request, path);
 }
 
+pub fn routing3(request: &HttpRequestInfo) -> Option<RelayConnectionInfo> {
+    let re = Regex::new(r"^/s2cattleya/.*").unwrap();
+    let mut path = "none";
+    let username = std::env::var_os("USERNAME").unwrap().to_str().unwrap();
+    let relay = if re.is_match(&request.http_first_line.uri) {
+        path = "/cattleya";
+        Some(RelayConnectionInfo {
+            host: "localhost".to_string(),
+            port: 8000,
+            path: path.to_string(),
+        })
+    } else {
+        None
+    };
+    print("routing1", request, &path);
+    return relay;
+}
 
 #[test]
 fn test() {
@@ -103,4 +120,9 @@ fn test_get_address() {
         path: "/cattleya/view/login?targetUser=wakuden".to_string(),
     };
     assert_eq!("localhost", relay.get_address());
+}
+
+
+#[test]
+fn test_get_user_name() {
 }

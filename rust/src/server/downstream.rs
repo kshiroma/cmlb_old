@@ -49,7 +49,7 @@ impl Downstream {
 
     pub fn sendBody(&self, reader: &mut Read, writer: &mut Write) {
         let data_length = self.response.http_response_header.content_length;
-        let mut buf = [0; 1];
+        let mut buf = [0; 1024];
         if data_length > 0 {
             let mut unsend_data_length = self.response.http_response_header.content_length;
             while unsend_data_length > 0 {
@@ -57,10 +57,12 @@ impl Downstream {
                 let d = size.to_string();
                 let data_length: i64 = d.parse().unwrap();
                 writer.write(&buf[0..size]);
+                log::trace!("response {} data",d);
                 unsend_data_length = unsend_data_length - data_length;
             }
         } else if data_length == 0 {
             //何もしない
+            log::trace!("response nothing");
         } else {
             let mut send_data_length = 0;
             loop {
@@ -71,6 +73,7 @@ impl Downstream {
                 let d = size.to_string();
                 let data_length: i64 = d.parse().unwrap();
                 writer.write(&buf[0..size]);
+                log::trace!("response {} data",d);
                 send_data_length = send_data_length + data_length;
                 if (send_data_length > 512) {
                     writer.flush();

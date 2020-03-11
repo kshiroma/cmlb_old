@@ -11,13 +11,13 @@ use crate::server::http_request::read_http_request;
 use crate::server::upstream::Upstream;
 
 pub struct Worker {
-    config: Arc<ServerConfig>
+    config: Arc<ServerConfig>,
 }
 
 impl Worker {
     pub fn new(config: Arc<ServerConfig>) -> Self {
         Worker {
-            config
+            config,
         }
     }
 

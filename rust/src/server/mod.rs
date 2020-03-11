@@ -10,6 +10,9 @@ mod worker;
 mod upstream;
 mod downstream;
 
+use log::{error, warn, info, debug, LevelFilter};
+use std::env;
+
 
 pub fn listen(config: ServerConfig, port: i32) -> std::io::Result<()> {
     let rc = std::sync::Arc::new(config);
@@ -25,7 +28,10 @@ pub fn listen(config: ServerConfig, port: i32) -> std::io::Result<()> {
         };
         let _ = std::thread::spawn(|| -> std::io::Result<()> {
             let worker = worker::Worker::new(rc0);
-            worker.handle(stream)
+            debug!("worker start");
+            let result = worker.handle(stream);
+            debug!("worker is end.");
+            return result;
         });
     }
     Ok(())
@@ -33,7 +39,8 @@ pub fn listen(config: ServerConfig, port: i32) -> std::io::Result<()> {
 
 #[test]
 fn test() {
+    log::set_max_level(LevelFilter::Trace);
     let config = createSampleConfig();
     listen(config, 80);
-    println!("end");
 }
+

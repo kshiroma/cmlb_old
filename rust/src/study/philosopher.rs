@@ -24,12 +24,13 @@ impl Philosopher {
     }
 
     fn eat(&self, table: &Table) {
+        //println!("{} begin.", self.name);
         let _left = table.forks[self.left].lock().unwrap();
-        thread::sleep(Duration::from_millis(1500));
+        //thread::sleep(Duration::from_millis(1500));
         let _right = table.forks[self.right].lock().unwrap();
 
         println!("{} is eating.", self.name);
-        thread::sleep(Duration::from_millis(10000));
+        thread::sleep(Duration::from_millis(100));
         println!("{} is done eating", self.name);
     }
 
@@ -40,7 +41,7 @@ impl Philosopher {
         let _right = table.forks[self.right].lock().unwrap();
 
         println!("{} is eating.", self.name);
-        thread::sleep(Duration::from_millis(1000));
+        thread::sleep(Duration::from_millis(10));
         println!("{} is done eating", self.name);
     }
 }
@@ -73,8 +74,6 @@ fn a() {
     }).collect();
 
     for h in handles {
-        println!("はじまり");
         h.join().unwrap();
-        println!("おわり");
     }
 }
