@@ -1,4 +1,5 @@
 use std::fmt::Pointer;
+use std::fs::read;
 use std::io::prelude::*;
 use std::net::TcpStream;
 use std::rc::Rc;
@@ -44,40 +45,47 @@ impl Downstream {
             writer.write(b"\r\n");
         }
         writer.write(b"\r\n");
-        println!("end send response header.")
+        log::trace!("end send response header.")
     }
 
     pub fn sendBody(&self, reader: &mut Read, writer: &mut Write) {
+        log::trace!("start sendBody");
         let data_length = self.response.http_response_header.content_length;
-        let mut buf = [0; 1024];
+        log::trace!("let data_length = self.response.http_response_header.content_length;");
+        let mut buf = [0; 4096];
+        log::trace!(stringify!(let mut buf = [0; 4096];));
         if data_length > 0 {
-            let mut unsend_data_length = self.response.http_response_header.content_length;
-            while unsend_data_length > 0 {
+            log::trace!("enter data_length>0");
+            let mut unsent_data_length = self.response.http_response_header.content_length;
+            log::trace!("unsent_data_length is {}",unsent_data_length);
+            while unsent_data_length > 0 {
                 let size = reader.read(&mut buf).unwrap();
                 let d = size.to_string();
-                let data_length: i64 = d.parse().unwrap();
+                let read_length: i64 = d.parse().unwrap();
                 writer.write(&buf[0..size]);
-                log::trace!("response {} data",d);
-                unsend_data_length = unsend_data_length - data_length;
+                log::trace!("response {} data",String::from_utf8_lossy(&buf[0..31]));
+                unsent_data_length = unsent_data_length - read_length;
+                log::trace!("unsent_data_length is {}",unsent_data_length);
             }
         } else if data_length == 0 {
             //何もしない
             log::trace!("response nothing");
         } else {
             let mut send_data_length = 0;
+            log::trace!("enter data_length = 0");
             loop {
+                log::trace!("reader.read(&mut buf).unwrap()");
+                //let size = reader.read(&mut buf).unwrap();
                 let size = reader.read(&mut buf).unwrap();
-                if size == 0 {
-                    break;
-                }
                 let d = size.to_string();
                 let data_length: i64 = d.parse().unwrap();
                 writer.write(&buf[0..size]);
-                log::trace!("response {} data",d);
+                log::trace!("response data_length = 0 :{} ",&buf[size-1]);
                 send_data_length = send_data_length + data_length;
-                if (send_data_length > 512) {
-                    writer.flush();
-                    send_data_length = 0;
+                writer.flush();
+                send_data_length = 0;
+                if size != buf.len() && buf[size - 1] == 10 {
+                    break;
                 }
             }
         }

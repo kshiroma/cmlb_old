@@ -3,10 +3,13 @@ use std::io::prelude::*;
 use std::net::TcpStream;
 use std::rc::Rc;
 
+
+
 use crate::io::read_line;
 use crate::server::config::RelayConnectionInfo;
 use crate::server::http_request::{HttpRequestInfo, read_http_request};
 use crate::server::http_response::{HttpResponseFirstLine, HttpResponseHeader, HttpResponseInfo, read_header};
+use std::time::Duration;
 
 pub struct Upstream {
     relay: Rc<RelayConnectionInfo>,

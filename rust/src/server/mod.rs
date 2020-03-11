@@ -1,4 +1,8 @@
+use std::env;
 use std::net::TcpListener;
+
+use chrono::Duration;
+use log::{debug, error, info, LevelFilter, warn};
 
 use crate::routing_sample::createSampleConfig;
 use crate::server::config::ServerConfig;
@@ -10,13 +14,10 @@ mod worker;
 mod upstream;
 mod downstream;
 
-use log::{error, warn, info, debug, LevelFilter};
-use std::env;
-
-
 pub fn listen(config: ServerConfig, port: i32) -> std::io::Result<()> {
     let rc = std::sync::Arc::new(config);
     let listener = std::net::TcpListener::bind(format!("127.0.0.1:{}", port))?;
+    //listener.set_nonblocking(true);
     for stream in listener.incoming() {
         let rc0 = rc.clone();
         let stream = match stream {
@@ -26,11 +27,11 @@ pub fn listen(config: ServerConfig, port: i32) -> std::io::Result<()> {
                 continue;
             }
         };
-        let _ = std::thread::spawn(|| -> std::io::Result<()> {
-            let worker = worker::Worker::new(rc0);
+        std::thread::spawn(move || -> std::io::Result<()> {
             debug!("worker start");
+            let worker = worker::Worker::new(rc0);
             let result = worker.handle(stream);
-            debug!("worker is end.");
+            debug!("worker end.");
             return result;
         });
     }

@@ -1,5 +1,5 @@
 use std::io::prelude::*;
-use std::net::TcpStream;
+use std::net::{TcpStream, Shutdown};
 use std::sync::Arc;
 
 use chrono::Local;
@@ -28,6 +28,8 @@ impl Worker {
         self.handle_read_writer(&mut reader, &mut writer);
         //終わり
         writer.flush().unwrap();
+        reader.shutdown(Shutdown::Both);
+        log::trace!("shutdown stream");
         return Ok(());
     }
 
@@ -51,15 +53,25 @@ impl Worker {
         let mut upstream = Upstream::new(bRelay, bRequest).unwrap();
 
         upstream.sendFirstLine();
+        log::trace!("upstream.sendFirstLine()");
         upstream.sendHeader();
+        log::trace!("upstream.sendHeader()");
         upstream.sendBody(reader);
+        log::trace!("upstream.sendBody(reader);");
         upstream.flush();
+        log::trace!("upstream.flush();");
         let response_info = upstream.read_http_response_info().unwrap();
+        log::trace!("let response_info = upstream.read_http_response_info().unwrap();");
         let downstream = Downstream::new(response_info);
+        log::trace!("let downstream = Downstream::new(response_info);");
         downstream.sendFirstLine(writer);
+        log::trace!("downstream.sendFirstLine(writer);");
         downstream.sendHeaders(writer);
+        log::trace!("downstream.sendHeaders(writer);");
         downstream.sendBody(&mut upstream.stream, writer);
+        log::trace!("downstream.sendBody(&mut upstream.stream, writer);");
         writer.flush();
+        log::trace!("writer.flush();");
         return Ok(());
     }
 }
